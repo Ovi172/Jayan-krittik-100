@@ -7,10 +7,10 @@ const mahmud = [
   "jan",
   "bot",
   "জান",
-  "জানু",
+  "rafsan",
   "বেবি",
-  "wifey",
-  "hinata"
+  "jamay",
+  "jayan"
 ];
 const baseApiUrl = async () => {
   const base = await axios.get("https://raw.githubusercontent.com/mahmudx7/exe/main/baseApiUrl.json");
