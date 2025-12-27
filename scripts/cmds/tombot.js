@@ -17,7 +17,7 @@ module.exports = {
 
   onChat: async function ({ event, message }) {
     const text = (event.body || "").toLowerCase().trim();
-    if (text === "𝐑𝐚𝐟𝐬𝐚𝐧") {
+    if (text === "Rafsan") {
       return message.reply("𝐎𝐲 𝐚𝐦𝐚𝐫 𝐨𝐰𝐧𝐞𝐫 𝐛𝐮𝐣𝐡𝐬𝐨  !!");
     }
   }
