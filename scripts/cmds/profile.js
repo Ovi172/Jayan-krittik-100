@@ -1,1 +1,46 @@
-async function onStart({ event, message, usersData, args, getLang }) { let avt; const uid1 = event.senderID; const uid2 = Object.keys(event.mentions)[0]; const uid3 = args[0] && /^\d+$/.test(args[0]) ? args[0] : null; if (event.type == "message_reply") { avt = await usersData.getAvatarUrl(event.messageReply.senderID); } else { if (!uid2) { if (uid3) { avt = await usersData.getAvatarUrl(uid3); } else { const regExCheckURL = /^(http|https):\/\/[^ "]+$/; const link = args[0]; const uid4 = link ? await global.utils.findUid(link) : null; if (regExCheckURL.test(link) && uid4) { avt = await usersData.getAvatarUrl(uid4); } else { avt = await usersData.getAvatarUrl(uid1); } } } else { avt = await usersData.getAvatarUrl(uid2); } } message.reply({ body: "", attachment: await global.utils.getStreamFromURL(avt) }); } const config = { name: "pp", aliases: ["profile"], version: "1.1", author: "Samir Œ", countDown: 5, role: 0, shortDescription: "profile image", longDescription: "profile image", category: "tools", guide: { en: " {pn} @tag" } }; module.exports = { config, onStart };
+const axios = require("axios");
+
+const baseApiUrl = async () => {
+  const base = await axios.get(
+    "https://raw.githubusercontent.com/mahmudx7/HINATA/main/baseApiUrl.json"
+  );
+  return base.data.mahmud;
+};
+
+module.exports = {
+  config: {
+    name: "pp",
+    aliases: ["pfp", "dp", "profile"],
+    version: "1.7",
+    author: "MahMUD",
+    role: 0,
+    category: "media"
+  },
+
+  onStart: async function ({ message, event, args }) {
+     const obfuscatedAuthor = String.fromCharCode(77, 97, 104, 77, 85, 68);  
+     if (module.exports.config.author !== obfuscatedAuthor) { return api.sendMessage("You are not authorized to change the author name.", event.threadID, event.messageID); }
+    
+    try {
+      const target =
+        Object.keys(event.mentions || {})[0] ||
+        event.messageReply?.senderID ||
+        args.join(" ") ||
+        event.senderID;
+
+        const apiUrl = `${await baseApiUrl()}/api/pfp?mahmud=${encodeURIComponent(target)}`;
+        const res = await axios.get(apiUrl, {
+        responseType: "stream"
+      });
+
+        return message.reply({
+        body: "🎀 Here's the profile picture",
+        attachment: res.data
+      });
+
+     } catch (e) {
+       console.log(e?.response?.status, e?.message);
+       return message.reply("🥹error, contact MahMUD");
+     }
+   }
+ };
